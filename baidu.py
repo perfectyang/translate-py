@@ -2,6 +2,7 @@
 #/usr/bin/env python
 #coding=utf8
 
+
 import random
 import requests
 import hashlib
@@ -17,5 +18,8 @@ def translateEnglish(q):
     sign = appid + q + str(salt)+secretKey
     sign = hashlib.md5(sign.encode(encoding='UTF-8')).hexdigest()
     myurl = myurl+'?appid='+str(appid)+'&q='+q+'&from=zh&to=en&salt='+str(salt)+'&sign='+sign
-    response = requests.get(url=myurl, headers=headers).json()
-    return response['trans_result'][0]
+    response = requests.get(url=myurl, headers=headers)
+    en = '翻译出错'
+    if response.status_code == 200:
+        en = response.json()['trans_result'][0]['dst']
+    return en

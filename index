@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 import requests, json, sys
 from langconv import *
-
+from youdao import translateEn
+from baidu import translateEnglish
 def Simplified2Traditional(sentence):
     sentence = Converter('zh-hant').convert(sentence)
     return sentence
 
 def translate(text):
-  url = 'http://fanyi.youdao.com/openapi.do?keyfrom=node-fanyi&key=110811608&type=data&doctype=json&version=1.1&q={}'.format(text)
-  response = requests.get(url).json()
   data = {
-    'gb': Simplified2Traditional(response['query']),
-    'en': response['translation'][0].replace('"', "'")
+    'gb': Simplified2Traditional(text),
+    # 'en': translateEn(text)
+    'en': translateEnglish(text)
   }
-  print({
-    response['query']: data
-  })
+  params = {}
+  params[text] = data
+  print(params)
 
 
 #inputText = input('please write your word: ')

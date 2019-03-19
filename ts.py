@@ -1,29 +1,23 @@
-import re, json, requests, uuid, hashlib
+import re, json
 from langconv import *
-from fake_useragent import UserAgent
-ua = UserAgent()
-headers={"User-Agent": ua.random}
-md = hashlib.md5()
+from youdao import translateEn
 # 繁体翻译
 def Simplified2Traditional(sentence):
     sentence = Converter('zh-hant').convert(sentence)
     return sentence
 
 def translate(text, category):
-  # url = 'http://fanyi.youdao.com/openapi.do?keyfrom=node-fanyi&key=110811608&type=data&doctype=json&version=1.1&q={}'.format(text)
   data = {
     'gb': Simplified2Traditional(text),
   }
   if category == 'en':
-      url = 'http://api.fanyi.baidu.com/api/trans/vip/translate?appid=20190315000277522&from=auto&q={}&to={}&salt={}&sign={}'.format(text, category, salt, sign)
-      response = requests.get(url=url, headers=headers).json()
-      print('请求回来', response)
-      data['en'] = response['translation'][0].replace('"', "'")
+      data['en'] = translateEn(text)
   return data
 
 with open('./cloud2.js', 'r+', encoding='utf8') as file:
     content = file.read()
     con = re.search(r'({.*})', content, re.S).group().replace("'", '"')
+    # 这里处理某个object的key没有引号
     newContent = re.sub(r"(\w*):\B", lambda m: '"'+ m.group(1) + '":', con)
     print('newContent', newContent)
     originconfig = json.dumps(json.loads(newContent), indent = 2, ensure_ascii=False)
