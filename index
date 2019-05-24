@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
 import requests, json, sys
-from langconv import *
-from youdao import translateEn
-from baidu import translateEnglish
-def Simplified2Traditional(sentence):
-    sentence = Converter('zh-hant').convert(sentence)
-    return sentence
+from youdao import translateEnglish
+from fanti import Simplified2Traditional
 
 def translate(text):
   data = {
     'gb': Simplified2Traditional(text),
-    # 'en': translateEn(text)
     'en': translateEnglish(text)
   }
   params = {}
