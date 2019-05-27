@@ -1,0 +1,21 @@
+<!doctype html>
+<title>模板</title>
+<style>
+.box {
+  width: 45%;
+  float: left;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  border: 1px solid red;
+}
+</style>
+{% for item in list %}
+<div class="box">
+  <div>{{loop.index}}</div>
+  <div>包名: {{ item.name }}</div>
+  <div>版本号:{{ item.version }}</div>
+  <div style="word-break: break-all;">node_module路径:{{ item.url }}</div>
+
+</div>
+
+{% endfor %}
